@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{font-family:-apple-system,Helvetica,Arial;margin:36px;color:#222;line-height:1.5}
+h1{color:#1a5d2c;font-size:22px;margin-bottom:4px}.sub{color:#666;margin-top:0}
+.step{border-left:5px solid #f2b705;background:#fafafa;padding:10px 16px;margin:14px 0;border-radius:4px}
+.n{font-weight:700;color:#1a5d2c}kbd{background:#eee;border:1px solid #bbb;border-radius:3px;padding:1px 5px;font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:12.5px;margin-top:8px}td,th{border:1px solid #ccc;padding:4px 7px;text-align:left}th{background:#e3f5e1}
+.warn{background:#fff4d6;padding:8px 12px;border-radius:4px}
+</style></head><body>
+<h1>Lab Assessment 4: Run the KNIME workflow</h1>
+<p class="sub">Workflow: <b>2601940017_LA4</b> &nbsp;|&nbsp; Location: ~/knime-workspace/2601940017_LA4 &nbsp;|&nbsp; KNIME 5.12</p>
+<p class="warn">Note: the last run executed <b>2601940017_lab3</b> instead. Make sure the tab title says <b>2601940017_LA4</b>.</p>
+<div class="step"><span class="n">Step 1:</span> In KNIME, click the <b>KNIME logo / Home</b> (top-left), then open <b>Local space</b>. This lists the folders inside <i>knime-workspace</i>.</div>
+<div class="step"><span class="n">Step 2:</span> Double-click <b>2601940017_LA4</b>. The canvas shows two coloured boxes: <i>"Task 2: Decision Tree - predict Profit / Loss"</i> (green) and <i>"Task 3: k-Means - customer segments"</i> (blue), with 18 nodes.</div>
+<div class="step"><span class="n">Step 3:</span> Press <kbd>Shift</kbd>+<kbd>F7</kbd> (or the <b>Execute all</b> button with two green arrows on the toolbar). Wait until <b>every node's light is green</b>. The k-Means and Decision Tree nodes take a few seconds.</div>
+<div class="step"><span class="n">Step 4:</span> Press <kbd>Cmd</kbd>+<kbd>S</kbd> to save. This writes <b>Predictions.csv</b> and <b>Customer_Clusters.csv</b> into the workflow's <i>data</i> folder.</div>
+<div class="step"><span class="n">Step 5:</span> Tell Claude <b>"done"</b>. Claude checks the results, exports the .knwf, and continues with Power BI and the report.</div>
+<p>If a node turns <b>red</b> or shows a yellow warning triangle, hover over it and send a screenshot of the message.</p>
+<h3>What the 18 nodes do</h3>
+<table><tr><th>#</th><th>Node</th><th>Setting</th></tr>
+<tr><td>1</td><td>CSV Reader</td><td>superstore.csv, 9,994 rows x 21 columns</td></tr>
+<tr><td>2</td><td>Rule Engine</td><td>ProfitStatus: Profit &gt; 0 &rarr; Profit, else Loss</td></tr>
+<tr><td>3</td><td>Column Filter</td><td>Ship Mode, Segment, Region, Category, Sub-Category, Sales, Quantity, Discount, ProfitStatus</td></tr>
+<tr><td>4</td><td>Partitioning</td><td>70/30, stratified on ProfitStatus, seed 42</td></tr>
+<tr><td>5-8</td><td>Decision Tree Learner / Predictor / Scorer / View</td><td>Gini index, min 10 records per node; confusion matrix on the 30% test data</td></tr>
+<tr><td>9</td><td>CSV Writer</td><td>Predictions.csv</td></tr>
+<tr><td>10-11</td><td>GroupBy + Column Renamer</td><td>Per Customer ID: TotalSales, TotalProfit, Orders, AvgDiscount</td></tr>
+<tr><td>12-14</td><td>Normalizer, k-Means, Denormalizer</td><td>Min-Max 0-1, k = 4, back to real values</td></tr>
+<tr><td>15-17</td><td>GroupBy, Color Manager, Scatter Plot</td><td>Cluster profile; TotalSales vs TotalProfit coloured by Cluster</td></tr>
+<tr><td>18</td><td>CSV Writer</td><td>Customer_Clusters.csv</td></tr></table>
+</body></html>
